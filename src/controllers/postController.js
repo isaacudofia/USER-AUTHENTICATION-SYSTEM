@@ -14,7 +14,6 @@ export const getAllPosts = async (req, res) => {
 
 export const getPost = async (req, res) => {
   const { id } = await req.params;
-
   try {
     res.status(200).json({
       message: `Get post with id: ${id}"`,
@@ -28,9 +27,11 @@ export const getPost = async (req, res) => {
 
 export const addPost = async (req, res) => {
   const { author, post } = await req.body;
+  const authHeader = req.headers.authorization;
+  console.log(authHeader);
 
   try {
-    res.status(204).json({
+    res.status(201).json({
       message: `Added post successfully`,
       data: `${author} posted an article on the ${format(
         new Date(),
