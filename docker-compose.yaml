@@ -1,0 +1,62 @@
+# Use version 3.8 of the Docker Compose file format
+version: "3.8"
+
+services:
+  # Database service
+  db:
+    # Use the official PostgreSQL image
+    image: postgres:14-alpine
+    # Restart the container if it stops
+    restart: always
+    # Set environment variables for the database using variables from the host's .env file
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    # Map a named volume to persist database data
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    # Expose the database port to the host machine for easy access with GUI tools
+    ports:
+      - "5432:5432" # Host_port:Container_port - Allows connecting from your host machine
+    # Health check to ensure the database is ready
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s # Give the DB a little time to start before checking
+
+  # Application service
+  app:
+    # Build the image using the development Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile.dev # Use the development Dockerfile
+    # Restart the container if it stops
+    restart: always
+    # Map the host port 3000 to the container port 3000
+    ports:
+      - "3000:3000"
+    # Set environment variables for the application
+    environment:
+      # DATABASE_URL points to the 'db' service within the Docker network
+      DATABASE_URL: postgres://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}?schema=public
+      # JWT_SECRET from the host's .env file
+      JWT_SECRET: ${JWT_SECRET}
+      # Set Node.js environment to development (optional but good practice)
+      NODE_ENV: development
+    # Mount the current directory into the container for hot-reloading during development
+    volumes:
+      - .:/app
+      - /app/node_modules # Exclude node_modules from the volume mount to avoid issues
+    # Application depends on the database service being healthy
+    depends_on:
+      db:
+        condition: service_healthy
+    # Override the default command to run migrations before starting the dev server
+    command: ["sh", "-c", "npx prisma migrate deploy && npm run dev"]
+
+# Define named volumes for persistent data
+volumes:
+  db_data:
