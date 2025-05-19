@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const AuthSchema = new Schema(
+const UserSchema = new Schema(
   {
     email: {
       type: String,
@@ -16,4 +16,4 @@ const AuthSchema = new Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Auth", AuthSchema);
+export default mongoose.model("User", UserSchema);
