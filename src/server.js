@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import postRoute from "./routes/postRoute.js";
 import errorHandler from "./middlewares/errorHandler.js";
+import mongoose from "mongoose";
 dotenv.config();
 
 const app = express(); //Instance of express application
@@ -17,6 +18,14 @@ app.use("/api", postRoute);
 //Error Handler Middleware
 app.use(errorHandler);
 
-app.listen(process.env.PORT, () =>
-  console.log(`Server: Server spinning on port ${process.env.PORT}`)
-);
+mongoose
+  .connect()
+  .then(() =>
+    app.listen(
+      process.env.PORT,
+      console.log(
+        `Server Spinning: Server spinning on ${process.env.PORT} and connected to DB`
+      )
+    )
+  )
+  .catch((err) => console.log(err.message));
