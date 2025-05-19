@@ -15,7 +15,7 @@ export const signUp = async (req, res) => {
       .status(400)
       .json({ message: "Username and password are required" });
   try {
-    const password = await bcrypt.hash(password, SALT_ROUNDS); //Hah the password using bcrypt
+    const password = await bcrypt.hash(password, SALT_ROUNDS); //Hash the password using bcrypt
     const user = await prisma.user.create({
       data: {
         username,

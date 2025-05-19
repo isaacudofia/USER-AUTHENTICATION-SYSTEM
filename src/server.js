@@ -19,7 +19,7 @@ app.use("/api", postRoute);
 app.use(errorHandler);
 
 mongoose
-  .connect()
+  .connect(process.env.MONGODB_URL)
   .then(() =>
     app.listen(
       process.env.PORT,
