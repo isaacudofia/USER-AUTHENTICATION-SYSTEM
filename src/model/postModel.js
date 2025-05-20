@@ -5,11 +5,11 @@ const PostSchema = new Schema(
   {
     author: {
       type: String,
-      require: true,
+      required: true,
     },
     post: {
       type: String,
-      require: true,
+      required: true,
     },
     userID: {
       type: String,
