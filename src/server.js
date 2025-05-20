@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import postRoute from "./routes/postRoute.js";
+import authRoutes from "./routes/authRoute.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import mongoose from "mongoose";
 dotenv.config();
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 //Route MiddleWares
+app.use("/api/auth", authRoutes);
 app.use("/api", postRoute);
 
 //Error Handler Middleware

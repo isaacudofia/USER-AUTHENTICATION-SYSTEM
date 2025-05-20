@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 const authMiddleware = (req, res, next) => {
@@ -18,6 +19,8 @@ const authMiddleware = (req, res, next) => {
       id: decoded.userId,
       username: decoded.username,
     };
+    console.log(req);
+
     next(); // Proceed to the next middleware or route handler
   });
 };
