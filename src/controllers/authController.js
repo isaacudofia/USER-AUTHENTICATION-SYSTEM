@@ -53,7 +53,7 @@ export const signIn = async (req, res) => {
 
     // Generate a JWT if credentials are valid
     const token = jwt.sign(
-      { userId: user.id, username: user.username },
+      { userId: userFound.id, username: userFound.username },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
