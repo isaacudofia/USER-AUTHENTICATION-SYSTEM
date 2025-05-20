@@ -2,10 +2,12 @@ import Post from "../model/postModel.js";
 
 export const getAllPosts = async (req, res) => {
   try {
-    const uniqueId = req.user;
-    console.log("uniqueId: ", uniqueId.id);
+    const uniqueID = req.user.id;
+    console.log("uniqueId: ", uniqueId);
+    const posts = await Post.find({ userID: uniqueID }).sort({ createdAt: -1 });
     res.status(200).json({
       message: "Get all posts successfully",
+      data: posts,
     });
   } catch (error) {
     res.status(400).json({
