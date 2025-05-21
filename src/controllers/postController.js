@@ -134,3 +134,5 @@ export const deletePost = async (req, res) => {
     });
   }
 };
+
+//END OF POST CONTROLLER
